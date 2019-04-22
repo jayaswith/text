@@ -1,1 +1,53 @@
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 
+namespace ConsoleApplication1
+{
+    class Program
+    {
+        public static void Main(string[] args)
+        {
+            string value = "Mar 02 1999";
+            string dateFormat = "dd/MM/yyyy";
+            CheckAndConvertToDate(value, dateFormat);
+        }
+
+
+
+        public static void CheckAndConvertToDate(string value, string dateFormat)
+        {
+            bool success = false;
+            string cases = dateFormat; string Outputdate = "";
+            DateTime date;
+            try
+            {
+
+                Regex RegularExpression = new Regex(@"(((0[1-9]|[12]\d|3[01])[- /.](0[1-9]|1[0-2])[- /.]([12]\d{3}))|((0[1-9]|1[0-2])[- /.](0[1-9]|[12]\d|3[01])[- /.]([12]\d{3}))|(([1-9])[- /.]([1-9])[- /.]([12]\d{3}))|(([1-9])[- /.]([Jj][Aa][Nn]|[Ff][Ee][Bb]|[Mm][Aa][Rr]|[Aa][Pp][Rr]|[Mm][Aa][Yy]|[Jj][Uu][Nn]|[Jj][Uu][Lj]|[Aa][Uu][Gg]|[Ss][Ee][Pp]|[Oo][Cc][Tt]|[Nn][Oo][Vv]|[Dd][Ee][Cc])[- /.]([12]\d{3}))|(([Jj][Aa][Nn]|[Ff][Ee][Bb]|[Mm][Aa][Rr]|[Aa][Pp][Rr]|[Mm][Aa][Yy]|[Jj][Uu][Nn]|[Jj][Uu][Lj]|[Aa][Uu][Gg]|[Ss][Ee][Pp]|[Oo][Cc][Tt]|[Nn][Oo][Vv]|[Dd][Ee][Cc])[\/. -](0[1-9]|[12]\d|3[01])[\/. -]([12]\d{3})))$");
+
+                if (RegularExpression.IsMatch(value))
+                {
+                    date = date = Convert.ToDateTime(value);
+                    Outputdate = date.ToString(dateFormat).Replace('-', '/');
+                    success = true;
+                }
+
+
+                Console.WriteLine(" Result Date Value is :- '" + success + "'");
+                Console.WriteLine(" Result Date Value is :- '" + Outputdate + "'");
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+
+            Console.ReadKey();
+        }
+
+    }
+}
