@@ -1,1 +1,122 @@
 
+
+Skip to content
+Using Gmail with screen readers
+
+1 of 492
+next
+Inbox
+x
+
+jayaswith jannu <jayasmart44@gmail.com>
+Attachments
+19:42 (4 minutes ago)
+to me
+
+
+Attachments area
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.IO;
+using System.Configuration;
+
+
+namespace VFS_ZipToPDFA.Logger
+{
+  public static  class LogInfo
+    {
+      public static void LogInfoMethod(string _sMessage, string _sSource, string _sCaption, int _iLogOption)
+      {
+          //iLogOptions
+          //------------------------------------
+          //0 - No Log Recorded, only Displayed
+          //1 - No Log Displayed, only Recorded
+          //2 - Both Log Recorded and Displayed
+          //------------------------------------
+          string sMessage = _sMessage;
+          string sSource = _sSource;
+          string sCaption = _sCaption;
+          int iLogOption = _iLogOption;
+
+
+          try
+          {
+              //Creating Stream writer object
+              StreamWriter objWriter = default(StreamWriter);
+              //getting logfolder Path
+              string logfolderPath = ConfigurationManager.AppSettings["Logfilepath"].ToString() + "\\LOG" + "/" + DateTime.Now.ToString("ddMMyyyy");
+              string LogFile = logfolderPath + "/" + "Project1" + DateTime.Now.ToString("ddMMyyyy") + ".Log";
+              //creating fileinfo object
+              FileInfo fi = new FileInfo(LogFile);
+              //checking already log file exist or not
+              if (File.Exists(LogFile))
+              {
+                  //Checking logfile size 
+                  if (fi.Length > 524288)
+                  {
+                      string[] _files = Directory.GetFiles(logfolderPath + "/");
+                      //Renaming existing Log file
+                      //Microsoft.VisualBasic.FileIO.FileSystem.RenameFile(LogFile, "AppErr" + DateTime.Now.ToString("ddMMyyyy") + "_" + _files.Length + ".Log");
+                      File.Move(LogFile, "Project1" + DateTime.Now.ToString("ddMMyyyy") + "_" + _files.Length + ".Log");
+                  }
+              }
+
+              if (iLogOption == 1 )
+              {
+
+                  if (!File.Exists(LogFile))
+                  {
+                      if (!Directory.Exists(Path.GetDirectoryName(LogFile)))
+                      {
+                          try
+                          {
+                              Directory.CreateDirectory(Path.GetDirectoryName(LogFile));
+                          }
+                          catch (Exception ex)
+                          {
+
+                              return;
+                          }
+                      }
+                      try
+                      {
+                          objWriter = File.CreateText(LogFile);
+                      }
+                      catch (Exception ex)
+                      {
+
+                          return;
+                      }
+                  }
+                  else
+                  {
+                      objWriter = File.AppendText(LogFile);
+                  }
+
+                  objWriter.WriteLine(System.DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt") + " - " + sMessage + (!string.IsNullOrEmpty(sSource.Trim()) ? " ====:" + sSource : "") + "====" + sCaption);                 
+                  objWriter.Flush();
+                  objWriter.Close();
+                  objWriter = null;
+              }
+
+          }
+          catch (Exception ex)
+          {
+              if (sCaption != "Exception")
+              {
+                  System.Threading.Thread.Sleep(50);
+                  LogInfoMethod(sMessage, sSource, "Exception", iLogOption);
+              }
+          }
+
+      }
+
+
+
+    }
+}
+next.txt
+Displaying next.txt.
